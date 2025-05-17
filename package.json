@@ -1,6 +1,6 @@
 {
-  "name": "@kmcbride3/n8n-nodes-discord",
-  "version": "0.7.4",
+  "name": "@shawndao/n8n-nodes-discord",
+  "version": "0.7.5",
   "description": "nodes to trigger workflows from Discord or send interactive messages. Uses the components API which allows to create dialogs (e.g. attach buttons and wait for the user to click on them)",
   "keywords": [
     "n8n",
@@ -11,16 +11,13 @@
     "n8n-community-node-package"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/kmcbride3/n8n-nodes-discord",
-  "author": {
-    "name": "kmcbride3",
-    "url": "https://github.com/kmcbride3"
-  },
+  "homepage": "https://github.com/shawndao/n8n-nodes-discord",
+  "author": "shawndao (https://github.com/shawndao)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kmcbride3/n8n-nodes-discord.git"
+    "url": "git+https://github.com/shawndao/n8n-nodes-discord.git"
   },
-  "main": "index.js",
+  "main": "dist/index.js",
   "engines": {
     "node": ">=16.9.0"
   },
@@ -33,7 +30,9 @@
     "publish": "pnpm build && pnpm publish --access public"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE.md"
   ],
   "n8n": {
     "n8nNodesApiVersion": 1,
@@ -82,5 +81,8 @@
     "hexoid": "^2.0.0",
     "node-ipc": "^12.0.0"
   },
-  "packageManager": "pnpm@9.12.3"
+  "packageManager": "pnpm@9.12.3",
+  "bugs": {
+    "url": "https://github.com/kmcbride3/n8n-nodes-discord/issues"
+  }
 }

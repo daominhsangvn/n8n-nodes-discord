@@ -13,7 +13,7 @@ import {
   IWebhookFunctions,
   IWebhookResponseData,
   JsonObject,
-  NodeConnectionType,
+  NodeConnectionTypes,
   NodeOperationError,
 } from 'n8n-workflow'
 import ipc from 'node-ipc'
@@ -31,7 +31,7 @@ const nodeDescription: INodeTypeDescription = {
   displayName: 'Discord Trigger',
   name: 'discordTrigger',
   icon: 'file:discord.svg',
-  group: ['trigger', 'discord'],
+  group: ['trigger'],
   version: 1,
   subtitle: '',
   description: 'Trigger based on Discord events',
@@ -43,7 +43,7 @@ const nodeDescription: INodeTypeDescription = {
   },
   // nodelinter-ignore-next-line WRONG_NUMBER_OF_INPUTS_IN_REGULAR_NODE_DESCRIPTION
   inputs: [],
-  outputs: [NodeConnectionType.Main],
+  outputs: [NodeConnectionTypes.Main],
   credentials: [
     {
       name: 'discordApi',
