@@ -1,6 +1,6 @@
 {
-  "name": "n8n-nodes-discord-wf",
-  "version": "1.1.1",
+  "name": "n8n-nodes-discord-wf2",
+  "version": "1.0.0",
   "description": "nodes to trigger workflows from Discord or send interactive messages. Uses the components API which allows to create dialogs (e.g. attach buttons and wait for the user to click on them)",
   "keywords": [
     "n8n",
@@ -30,7 +30,7 @@
     "lint:fix": "eslint nodes credentials --fix",
     "lint:format": "prettier nodes credentials --write",
     "lint": "pnpm lint:format && pnpm lint:fix",
-    "publish": "pnpm build && pnpm publish --access public"
+    "pub": "pnpm build && pnpm publish --access public"
   },
   "files": [
     "dist"
