@@ -25,17 +25,65 @@ export default function (client: Client): void {
             let match = false
             const botMention = message.mentions.users.has(state.clientId)
 
-            if (trigger.messageRegex) {
-              addLog(`[messageCreate] Message regex: ${trigger.messageRegex}`, client, 'info')
-              const reg = new RegExp(trigger.messageRegex, 'gim')
-              match = reg.test(content)
-              addLog(`[messageCreate] Match: ${match}`, client, 'info')
-            } else if (botMention) {
-              addLog(`[messageCreate] Bot mention: ${botMention}`, client, 'info')
-              match = true
+            // Check if this is a message-type trigger
+            if (trigger.type === 'message') {
+              // Check bot mention requirement
+              if (trigger.botMention && !botMention) {
+                addLog(`[messageCreate] Bot mention required but not found`, client, 'info')
+                match = false
+              } else if (trigger.pattern && trigger.value) {
+                // Prepare content for comparison
+                const compareContent = trigger.caseSensitive ? content : content.toLowerCase()
+                const compareValue = trigger.caseSensitive ? trigger.value : trigger.value.toLowerCase()
+
+                addLog(`[messageCreate] Pattern: ${trigger.pattern}, Value: ${trigger.value}, Case sensitive: ${trigger.caseSensitive}`, client, 'info')
+
+                switch (trigger.pattern) {
+                  case 'equal':
+                    match = compareContent === compareValue
+                    break
+                  case 'start':
+                    match = compareContent.startsWith(compareValue)
+                    break
+                  case 'contain':
+                    match = compareContent.includes(compareValue)
+                    break
+                  case 'end':
+                    match = compareContent.endsWith(compareValue)
+                    break
+                  case 'regex':
+                    try {
+                      const flags = trigger.caseSensitive ? 'g' : 'gi'
+                      const reg = new RegExp(trigger.value, flags)
+                      match = reg.test(content)
+                      addLog(`[messageCreate] Regex test with pattern: ${trigger.value}, flags: ${flags}, result: ${match}`, client, 'info')
+                    } catch (e) {
+                      addLog(`[messageCreate] Invalid regex pattern: ${trigger.value}`, client, 'error')
+                      match = false
+                    }
+                    break
+                  default:
+                    addLog(`[messageCreate] Unknown pattern type: ${trigger.pattern}`, client, 'warn')
+                    match = false
+                }
+              } else if (trigger.botMention && botMention) {
+                // Bot mention without specific pattern
+                addLog(`[messageCreate] Bot mention matched`, client, 'info')
+                match = true
+              }
+            } else {
+              // For backward compatibility with old messageRegex field
+              if (trigger.messageRegex) {
+                addLog(`[messageCreate] Using legacy messageRegex: ${trigger.messageRegex}`, client, 'info')
+                const reg = new RegExp(trigger.messageRegex, 'gim')
+                match = reg.test(content)
+              } else if (botMention) {
+                addLog(`[messageCreate] Bot mention: ${botMention}`, client, 'info')
+                match = true
+              }
             }
 
-            addLog(`[messageCreate] Match: ${match}`, client, 'info')
+            addLog(`[messageCreate] Match result: ${match}`, client, 'info')
 
             if (match) {
               // Set workflow context for logging
