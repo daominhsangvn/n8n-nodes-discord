@@ -1,7 +1,6 @@
 import {
   Client,
   Collection,
-  RESTPostAPIApplicationCommandsJSONBody,
   SlashCommandBooleanOption,
   SlashCommandBuilder,
   SlashCommandIntegerOption,
@@ -11,12 +10,13 @@ import {
 import { Socket } from 'net'
 import Ipc from 'node-ipc'
 
-import { registerCommands } from '../commands'
+import { CommandRegistrationData, registerCommands } from '../commands'
 import { addLog } from '../helpers'
 import state from '../state'
 
 interface ITriggerParameters {
   webhookId: string
+  event: string
   roleIds: string[]
   roleUpdateIds: string[]
   type: string
@@ -37,7 +37,7 @@ export default function (ipc: typeof Ipc, client: Client): void {
   // Store timeout reference to prevent memory leaks
   let commandUpdateTimeout: NodeJS.Timeout | null = null
   // Cache command parameters to reduce unnecessary processing
-  const commandCache = new Collection<string, RESTPostAPIApplicationCommandsJSONBody>()
+  const commandCache = new Collection<string, CommandRegistrationData>()
 
   ipc.server.on(
     'trigger',
@@ -51,11 +51,12 @@ export default function (ipc: typeof Ipc, client: Client): void {
       socket: Socket,
     ) => {
       try {
-        addLog(`trigger ${data.webhookId} update`, client)
+        addLog(`trigger ${data.webhookId} update`, client, 'info')
 
         // Update the trigger in state
         state.triggers[data.webhookId] = {
           ...data,
+          event: (data.event as string) || 'messageCreate', // Ensure event property exists
           channelIds: Array.isArray(data.channelIds) ? data.channelIds : [],
           roleIds: Array.isArray(data.roleIds) ? data.roleIds : [],
           roleUpdateIds: Array.isArray(data.roleUpdateIds) ? data.roleUpdateIds : [],
@@ -110,7 +111,7 @@ export default function (ipc: typeof Ipc, client: Client): void {
         // Batch command registrations with debounce
         commandUpdateTimeout = setTimeout(() => {
           if (commandsParam.length && data.credentials?.token && data.credentials?.clientId) {
-            const parsedCommands: RESTPostAPIApplicationCommandsJSONBody[] = []
+            const parsedCommands: CommandRegistrationData[] = []
 
             for (const params of commandsParam) {
               // Skip invalid commands
@@ -183,7 +184,7 @@ export default function (ipc: typeof Ipc, client: Client): void {
 
         ipc.server.emit(socket, 'trigger', true)
       } catch (error) {
-        addLog(`Error in trigger handler: ${error instanceof Error ? error.message : String(error)}`, client)
+        addLog(`Error in trigger handler: ${error instanceof Error ? error.message : String(error)}`, client, 'error')
         ipc.server.emit(socket, 'trigger', false)
       }
     },

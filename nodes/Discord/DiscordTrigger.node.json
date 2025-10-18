@@ -14,5 +14,6 @@
         "url": "https://github.com/shawndao/n8n-nodes-discord"
       }
     ]
-  }
+  },
+  "webhook": true
 }
