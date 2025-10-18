@@ -6,6 +6,7 @@ import state from '../state'
 export default function (client: Client): void {
   client.on('presenceUpdate', (_, newPresence) => {
     try {
+      addLog(`Presence updated: ${JSON.stringify(newPresence)}`, client, 'info')
       if (!newPresence || !newPresence.status || !newPresence.userId || !newPresence.guild) return
 
       if (state.channels[newPresence.guild.id] || state.channels.all) {

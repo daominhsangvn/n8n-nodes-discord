@@ -6,6 +6,7 @@ import state from '../state'
 export default function (client: Client): void {
   client.on('messageUpdate', (oldMessage, newMessage) => {
     try {
+      addLog(`Message updated: ${newMessage.content}`, client, 'info')
       if (Object.keys(state.channels).length > 0) {
         const matchedTriggers = Object.values(state.channels).flatMap((triggers) =>
           triggers.filter(

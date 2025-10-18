@@ -6,6 +6,7 @@ import state from '../state'
 export default function (client: Client): void {
   client.on('threadUpdate', (oldThread, newThread) => {
     try {
+      addLog(`Thread updated: ${JSON.stringify(newThread)}`, client, 'info')
       if (Object.keys(state.channels).length > 0) {
         const matchedTriggers = Object.values(state.channels).flatMap((triggers) =>
           triggers.filter((trigger) => trigger.type === 'thread_update' && trigger.channelIds?.includes(newThread.id)),

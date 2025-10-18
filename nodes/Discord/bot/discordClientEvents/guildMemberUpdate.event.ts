@@ -6,6 +6,7 @@ import state from '../state'
 export default function (client: Client): void {
   client.on('guildMemberUpdate', (oldMember, member) => {
     try {
+      addLog(`Guild member updated: ${JSON.stringify(member)}`, client, 'info')
       if (!member || member.user.system) return
       const previousUserRoles = oldMember.roles.cache.map((role) => role.id)
       const currentUserRoles = member.roles.cache.map((role) => role.id)

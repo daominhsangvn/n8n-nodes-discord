@@ -6,6 +6,7 @@ import state from '../state'
 export default function (client: Client) {
   client.on('guildMemberAdd', (member) => {
     try {
+      addLog(`Guild member added: ${JSON.stringify(member)}`, client, 'info')
       if (member.user.system) return
       Object.keys(state.channels).forEach((key) => {
         const channel = state.channels[key]

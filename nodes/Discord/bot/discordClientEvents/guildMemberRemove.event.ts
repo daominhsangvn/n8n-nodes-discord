@@ -6,6 +6,7 @@ import state from '../state'
 export default function (client: Client) {
   client.on('guildMemberRemove', async (member) => {
     try {
+      addLog(`Guild member removed: ${JSON.stringify(member)}`, client, 'info')
       if (member.user.system) return
       const userRoles = member.roles.cache.map((role) => role.id)
       Object.keys(state.channels).forEach((key) => {

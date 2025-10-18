@@ -7,6 +7,7 @@ export default function (client: Client): void {
   client.on('threadCreate', async (thread: ThreadChannel) => {
     try {
       const content = thread.name
+      addLog(`Thread created: ${content}`, client, 'info')
       if (!content) return
 
       const botMention = false // Thread creation doesn't have mentions

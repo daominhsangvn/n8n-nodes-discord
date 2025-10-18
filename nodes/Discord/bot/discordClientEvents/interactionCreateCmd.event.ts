@@ -6,6 +6,7 @@ import state from '../state'
 export default function (client: Client): void {
   client.on('interactionCreate', async (interaction) => {
     try {
+      addLog(`Interaction created: ${JSON.stringify(interaction)}`, client, 'info')
       if (!interaction.isChatInputCommand()) return
       if (!interaction.guildId) {
         await interaction.reply({ content: 'Commands work only inside channels' })
