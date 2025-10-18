@@ -262,7 +262,7 @@ async function discordApiTest(
 ): Promise<INodeCredentialTestResult> {
   const requestOptions = {
     method: 'GET',
-    uri: 'https://discord.com/api/v10/oauth2/@me',
+    uri: 'https://discord.com/api/users/@me',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
       'User-Agent': 'DiscordBot (https://www.discord.com, 1)',
